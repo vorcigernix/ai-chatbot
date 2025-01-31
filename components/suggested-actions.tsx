@@ -22,8 +22,8 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
     },
     {
       title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
+      label: `filter events where the event_type is "pageview"`,
+      action: `Write javascript lambda code that take in json and filters events where the event_type is "pageview"`,
     },
     {
       title: 'Help me write an essay',
