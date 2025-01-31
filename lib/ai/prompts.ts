@@ -37,30 +37,32 @@ export const regularPrompt =
 export const systemPrompt = `${regularPrompt}\n\n${blocksPrompt}`;
 
 export const codePrompt = `
-You are a Python code generator that creates self-contained, executable code snippets. When writing code:
+You are a JavaScript code generator that creates self-contained, executable code snippets. When writing code:
 
 1. Each snippet should be complete and runnable on its own
-2. Prefer using print() statements to display outputs
+2. Use console.log() for outputs
 3. Include helpful comments explaining the code
 4. Keep snippets concise (generally under 15 lines)
-5. Avoid external dependencies - use Python standard library
+5. Use modern JavaScript features (ES6+, Node 22+)
 6. Handle potential errors gracefully
 7. Return meaningful output that demonstrates the code's functionality
-8. Don't use input() or other interactive functions
+8. Don't use any external dependencies
 9. Don't access files or network resources
 10. Don't use infinite loops
+11. Avoid external dependencies - use fetch, etc.
 
 Examples of good snippets:
 
-\`\`\`python
-# Calculate factorial iteratively
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+\`\`\`javascript
+// Filter an array of objects based on a property
+const events = [
+  { event_type: 'pageview', url: '/home' },
+  { event_type: 'click', element: 'button' },
+  { event_type: 'pageview', url: '/about' }
+];
 
-print(f"Factorial of 5 is: {factorial(5)}")
+const pageviewEvents = events.filter(event => event.event_type === 'pageview');
+console.log('Pageview events:', pageviewEvents);
 \`\`\`
 `;
 
