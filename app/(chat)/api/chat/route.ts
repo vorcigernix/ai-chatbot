@@ -26,6 +26,7 @@ import { createDocument } from '@/lib/ai/tools/create-document';
 import { updateDocument } from '@/lib/ai/tools/update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
+import { getDataSources } from '@/lib/ai/tools/get-data-sources';
 
 export const maxDuration = 60;
 
@@ -33,7 +34,8 @@ type AllowedTools =
   | 'createDocument'
   | 'updateDocument'
   | 'requestSuggestions'
-  | 'getWeather';
+  | 'getWeather'
+  | 'getDataSources';
 
 const blocksTools: AllowedTools[] = [
   'createDocument',
@@ -42,8 +44,7 @@ const blocksTools: AllowedTools[] = [
 ];
 
 const weatherTools: AllowedTools[] = ['getWeather'];
-const allTools: AllowedTools[] = [...blocksTools, ...weatherTools];
-
+const allTools: AllowedTools[] = [...blocksTools, ...weatherTools, 'getDataSources'];
 export async function POST(request: Request) {
   const {
     id,
@@ -100,6 +101,7 @@ export async function POST(request: Request) {
             dataStream,
             model,
           }),
+          getDataSources: getDataSources(),
         },
         onFinish: async ({ response }) => {
           if (session.user?.id) {
