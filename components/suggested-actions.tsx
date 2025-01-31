@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { ChatRequestOptions, CreateMessage, Message } from 'ai';
 import { memo } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 interface SuggestedActionsProps {
   chatId: string;
@@ -38,33 +39,36 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   ];
 
   return (
-    <div className="grid sm:grid-cols-2 gap-2 w-full">
+    <div className="flex gap-2 mb-2 overflow-x-auto pb-1">
       {suggestedActions.map((suggestedAction, index) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
+          exit={{ opacity: 0, y: 10 }}
           transition={{ delay: 0.05 * index }}
           key={`suggested-action-${suggestedAction.title}-${index}`}
-          className={index > 1 ? 'hidden sm:block' : 'block'}
         >
-          <Button
-            variant="ghost"
-            onClick={async () => {
-              window.history.replaceState({}, '', `/chat/${chatId}`);
-
-              append({
-                role: 'user',
-                content: suggestedAction.action,
-              });
-            }}
-            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
-          >
-            <span className="font-medium">{suggestedAction.title}</span>
-            <span className="text-muted-foreground">
-              {suggestedAction.label}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  window.history.replaceState({}, '', `/chat/${chatId}`);
+                  append({
+                    role: 'user',
+                    content: suggestedAction.action,
+                  });
+                }}
+                className="px-3 py-2 h-auto whitespace-nowrap"
+              >
+                <span className="text-sm">{suggestedAction.title}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{suggestedAction.label}</p>
+            </TooltipContent>
+          </Tooltip>
         </motion.div>
       ))}
     </div>
