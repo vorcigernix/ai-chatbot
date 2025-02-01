@@ -1,22 +1,21 @@
-'use client';
+"use client";
 
-import type { Attachment, Message } from 'ai';
-import { useChat } from 'ai/react';
-import { useState } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
+import type { Attachment, Message } from "ai";
+import { useChat } from "ai/react";
+import { useState } from "react";
+import useSWR, { useSWRConfig } from "swr";
 
-import { ChatHeader } from '@/components/chat-header';
-import type { Vote } from '@/lib/db/schema';
-import { fetcher, generateUUID } from '@/lib/utils';
+import { ChatHeader } from "@/components/chat-header";
+import type { Vote } from "@/lib/db/schema";
+import { fetcher, generateUUID } from "@/lib/utils";
 
-import { Block } from './block';
-import { MultimodalInput } from './multimodal-input';
-import { Messages } from './messages';
-import { VisibilityType } from './visibility-selector';
-import { useBlockSelector } from '@/hooks/use-block';
-import { User } from 'next-auth';
-
-
+import { Block } from "./block";
+import { MultimodalInput } from "./multimodal-input";
+import { Messages } from "./messages";
+import { VisibilityType } from "./visibility-selector";
+import { useBlockSelector } from "@/hooks/use-block";
+import { User } from "next-auth";
+import { SuggestedActions } from "./suggested-actions";
 
 export function Chat({
   id,
@@ -31,7 +30,7 @@ export function Chat({
   selectedModelId: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
-  user:User | null;
+  user: User | null;
 }) {
   const { mutate } = useSWRConfig();
 
@@ -53,7 +52,7 @@ export function Chat({
     sendExtraMessageFields: true,
     generateId: generateUUID,
     onFinish: () => {
-      mutate('/api/history');
+      mutate("/api/history");
     },
   });
 
@@ -72,7 +71,9 @@ export function Chat({
           chatId={id}
           selectedModelId={selectedModelId}
           selectedVisibilityType={selectedVisibilityType}
-          isReadonly={isReadonly} user={user ?? undefined}    />
+          isReadonly={isReadonly}
+          user={user ?? undefined}
+        />
 
         <Messages
           chatId={id}
@@ -84,24 +85,26 @@ export function Chat({
           isReadonly={isReadonly}
           isBlockVisible={isBlockVisible}
         />
-
-        <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
-          {!isReadonly && (
-            <MultimodalInput
-              chatId={id}
-              input={input}
-              setInput={setInput}
-              handleSubmit={handleSubmit}
-              isLoading={isLoading}
-              stop={stop}
-              attachments={attachments}
-              setAttachments={setAttachments}
-              messages={messages}
-              setMessages={setMessages}
-              append={append}
-            />
-          )}
-        </form>
+        <div className="flex flex-col gap-2 mx-auto px-4 bg-background w-full md:max-w-3xl">
+          <SuggestedActions chatId={id} append={append} />
+          <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+            {!isReadonly && (
+              <MultimodalInput
+                chatId={id}
+                input={input}
+                setInput={setInput}
+                handleSubmit={handleSubmit}
+                isLoading={isLoading}
+                stop={stop}
+                attachments={attachments}
+                setAttachments={setAttachments}
+                messages={messages}
+                setMessages={setMessages}
+                append={append}
+              />
+            )}
+          </form>
+        </div>
       </div>
 
       <Block
